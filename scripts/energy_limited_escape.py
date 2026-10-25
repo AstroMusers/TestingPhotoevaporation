@@ -21,9 +21,9 @@ def escape_table():
     flux = np.geomspace(1, 1e4, 80) * u.W / u.m**2  # [W/m^2]
     efficiencies = [0.05, 0.1, 0.3]
     frames = []
-    for radius in radii:
+    for radius in radii:  # [Earth radius]
         for efficiency in efficiencies:
-            rate = energy_limited_mass_loss(mass, radius, flux, efficiency=efficiency)
+            rate = energy_limited_mass_loss(mass, radius, flux, efficiency=efficiency)  # [kg/s]
             frames.append(pd.DataFrame({
                 'planet_mass_earth': mass.to_value(u.M_earth),
                 'planet_radius_earth': radius.to_value(u.R_earth),

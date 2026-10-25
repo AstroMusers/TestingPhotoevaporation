@@ -1,12 +1,12 @@
 # TestingPhotoevaporation
 
-This repository collects tools and notes for testing planetary-atmosphere photoevaporation.
+How does the energy-limited escape rate scale with planet radius, heating efficiency, and incident XUV flux? We explore that question with a synthetic grid and TDpy's shared, unit-aware mass-loss calculation.
 
 From the checkout root, source `scripts/set_repository_path.sh` to set `TESTINGPHOTOEVAPORATION_PATH` in the current shell. The ignored `data/` and `visuals/` directories are available for local inputs and generated figures.
 
 ## Static escape calculation
 
-We start with an explicit toy energy budget. Our [notebook](examples/energy_limited_escape.ipynb)
+Our [notebook](examples/energy_limited_escape.ipynb)
 calls `run_example` in [the example script](scripts/energy_limited_escape.py), which
 evaluates TDpy's unit-aware `energy_limited_mass_loss` helper. The planet mass stays
 at five Earth masses. We vary radius from one to three Earth radii, heating
@@ -16,10 +16,9 @@ absorption radius equals the planet radius and the Roche factor is one.
 ![Static toy escape rates showing the imposed radius and heating-efficiency scalings](examples/visuals/energy_limited_escape_white_20261024_010714.png)
 
 The [interactive figure](examples/visuals/energy_limited_escape_white_20261024_010714.html)
-uses the same calculated rates. The complete 720-row toy grid is retained in
-a CSV alongside the figure. The nine curves in the table cover all three radii
-and all three efficiencies. The two panels show the fixed-efficiency and
-fixed-radius slices. Neither panel is an observed population.
+uses the same 720 calculated rates as the CSV. Its two panels show
+fixed-efficiency and fixed-radius slices of the nine radius-efficiency
+combinations. These curves represent the specified synthetic inputs.
 
 Install the pinned TDpy revision and the example's dependencies from this checkout.
 The notebook's interactive figure additionally requires Bokeh 3.10 or later.
@@ -35,9 +34,8 @@ The CLI writes timestamped outputs under `visuals/`. The notebook writes directl
 under `examples/visuals/`. Each call returns the table and output paths. Existing
 outputs are never replaced. PNG is the default at 300 dpi. PDF and white/dark
 themes are supported, and `--bokeh` adds a self-contained HTML version. The
-calculation evaluates 720 independent static input combinations without an
-optimizer, sampler, network request, or time integration. Plot writing and optional
-HTML serialization are additional costs.
+calculation evaluates 720 static input combinations without time integration.
+Plot generation and optional HTML serialization add runtime.
 
 ## Assumptions and limits
 
