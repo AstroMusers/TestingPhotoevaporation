@@ -9,6 +9,7 @@ from astropy import units as u
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from tdpy.cli import add_plot_arguments
 from tdpy.exoplanet import energy_limited_mass_loss
 from tdpy.plotting import plot_style, save_plot
 from tdpy.verbosity import print
@@ -118,7 +119,7 @@ def run_example(output_directory, typefileplot='png', typeplotback='white', writ
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-directory', type=Path, default=Path(__file__).resolve().parents[1] / 'visuals')
-    parser.add_argument('--typefileplot', choices=('png', 'pdf'), default='png')
+    add_plot_arguments(parser)
     parser.add_argument('--typeplotback', choices=('white', 'dark'), default='white')
     parser.add_argument('--bokeh', action='store_true')
     arguments = parser.parse_args()

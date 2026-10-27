@@ -1,6 +1,6 @@
 # TestingPhotoevaporation
 
-How does the energy-limited escape rate scale with planet radius, heating efficiency, and incident XUV flux? We explore that question with a synthetic grid and TDpy's shared, unit-aware mass-loss calculation.
+An energy-limited escape calculation connects planet radius, heating efficiency, and incident XUV flux to the mass-loss rate. Our example samples those inputs on a synthetic grid and uses TDpy's unit-aware calculation.
 
 From the checkout root, source `scripts/set_repository_path.sh` to set `TESTINGPHOTOEVAPORATION_PATH` in the current shell. The ignored `data/` and `visuals/` directories are available for local inputs and generated figures.
 
@@ -35,7 +35,6 @@ under `examples/visuals/`. Each call returns the table and output paths. Existin
 outputs are never replaced. PNG is the default at 300 dpi. PDF and white/dark
 themes are supported, and `--bokeh` adds a self-contained HTML version. The
 calculation evaluates 720 static input combinations without time integration.
-Plot generation and optional HTML serialization add runtime.
 
 ## Assumptions and limits
 
