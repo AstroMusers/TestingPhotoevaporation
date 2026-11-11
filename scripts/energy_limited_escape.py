@@ -108,11 +108,16 @@ def run_example(output_directory, typefileplot='png', typeplotback='white', writ
                     ha='center', fontsize=10)
         static.get_layout_engine().set(rect=(0, 0.08, 1, 0.92))
         print(f"Writing to {paths['static']}...")
-        save_plot(static, paths['static'], dpi=300)
-        plt.close(static)
+        try:
+            with paths['static'].open('xb') as output:
+                save_plot(static, output, dpi=300, format=typefileplot)
+        finally:
+            plt.close(static)
     if write_bokeh:
+        html = file_html(row(*interactive_panels), INLINE, 'Static toy escape rates')
         print(f"Writing to {paths['bokeh']}...")
-        paths['bokeh'].write_text(file_html(row(*interactive_panels), INLINE, 'Static toy escape rates'), encoding='utf-8')
+        with paths['bokeh'].open('x', encoding='utf-8') as output:
+            output.write(html)
     return {'table': table, 'paths': paths}
 
 

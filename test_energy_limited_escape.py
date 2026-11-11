@@ -4,6 +4,7 @@ import runpy
 import numpy as np
 import pandas as pd
 import pytest
+from tdpy.verbosity import print
 
 
 @pytest.fixture
@@ -63,7 +64,32 @@ def test_example_artifacts_themes_formats_and_preservation(workflow, tmp_path, m
     assert hashes == {name: path.read_bytes() for name, path in result['paths'].items()}
 
 
+@pytest.mark.parametrize('collision', ['png', 'pdf', 'html'])
+def test_output_created_after_preflight_is_not_overwritten(workflow, tmp_path, monkeypatch, collision):
+    if collision == 'html':
+        pytest.importorskip('bokeh', minversion='3.10')
+    time_tag = '20261108_000000'
+    path = tmp_path / f'energy_limited_escape_white_{time_tag}.{collision}'
+    original_table = workflow['escape_table']
+
+    def create_collision():
+        table = original_table()
+        print(f'Writing to {path}...')
+        path.write_bytes(b'existing output')
+        return table
+
+    monkeypatch.setitem(workflow['run_example'].__globals__, 'escape_table', create_collision)
+    with pytest.raises(FileExistsError):
+        workflow['run_example'](
+            tmp_path, typefileplot='pdf' if collision == 'pdf' else 'png',
+            write_bokeh=collision == 'html', time_tag=time_tag,
+        )
+    print(f'Reading from {path}...')
+    assert path.read_bytes() == b'existing output'
+
+
 def test_optional_bokeh_contains_same_flux_and_rate_values(workflow, tmp_path, monkeypatch):
+    pytest.importorskip('bokeh', minversion='3.10')
     embed = pytest.importorskip('bokeh.embed')
     original = embed.file_html
     def capture(layout, *args, **kwargs):
